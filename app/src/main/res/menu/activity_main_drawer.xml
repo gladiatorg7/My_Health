@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/connection"
+            android:title="Connection"
+            android:icon="@drawable/ic_bluetooth_black_24dp" />
+        <item
+            android:id="@+id/my_history"
+            android:title="My History"
+            android:icon="@drawable/ic_my_history_24dp" />
+        <item
+            android:id="@+id/send_data"
+            android:title="Send Data"
+            android:icon="@drawable/ic_send_data_24dp"
+            android:checked="false" />
+
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/contact_us"
+                android:title="Contact us"
+                android:icon="@drawable/ic_email_black_24dp" />
+
+        </menu>
+    </item>
+
+</menu>

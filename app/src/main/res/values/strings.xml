@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">My_Health</string>
+    <string name="myhealth">MyHealth</string>
+    <string name="university">University of Aegean</string>
+    <string name="title_activity_main">My_Health</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="connect">Button</string>
+    <string name="disconnect">Button</string>
+    <string name="connection_fragment" />
+    <string name="disconnect_button">Disconnect</string>
+    <string name="connect_button">Connect</string>
+    <string name="noteMessage">Note : If you want to connect, please make sure that you have enable the bluetooth service</string>
+</resources>
