@@ -40,6 +40,7 @@ import org.w3c.dom.Text;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -65,7 +66,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     private static Context context;
     View rootView;
     protected Activity activity;
-    private static BufferedWriter outputStreamWriter;
+    private static FileOutputStream outputStreamWriter;
 
     private LineChart mChart;
     public Connection() {
@@ -103,10 +104,13 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                              Bundle savedInstanceState) {
 
         try {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
+            dir.mkdirs();
+            File file = new File(dir, "filename");
 
-            FileWriter fileWriter = new FileWriter(context.getFilesDir().getPath().toString() + "/vaggos.txt");
+             outputStreamWriter = new FileOutputStream(file);
 
-            outputStreamWriter = new BufferedWriter(fileWriter);
             Log.d("FileWriter", "File writer with " + Environment.getExternalStorageDirectory().getPath());
 
         } catch (IOException e) {
