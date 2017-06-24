@@ -23,6 +23,7 @@ public class NewConnectedListener extends ConnectListenerImpl
 
     private final int HEART_RATE = 0x100;
     private final int INSTANT_SPEED = 0x101;
+    private final int HEART_BEAT_TS = 0x103;
     private HRSpeedDistPacketInfo HRSpeedDistPacket = new HRSpeedDistPacketInfo();
 
     public NewConnectedListener(Handler handler,Handler _NewHandler) {
@@ -82,6 +83,14 @@ public class NewConnectedListener extends ConnectListenerImpl
                     _aNewHandler.sendMessage(text1);
                     System.out.println("Instant Speed is "+ InstantSpeed);
                     //************************
+
+                    int[] HeartBeatTS = HRSpeedDistPacket.GetHeartBeatTS(DataArray);
+
+                    text1 = _aNewHandler.obtainMessage(HEART_BEAT_TS);
+                    b1.putString("HeartBeatTS", String.valueOf(HeartBeatTS));
+                    text1.setData(b1);
+                    _aNewHandler.sendMessage(text1);
+                    System.out.println("Heart Beat TS is "+ HeartBeatTS);
                 }
             }
         });

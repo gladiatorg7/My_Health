@@ -63,6 +63,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     NewConnectedListener _NConnListener;
     private final int HEART_RATE = 0x100;
     private final int INSTANT_SPEED = 0x101;
+    private final int HEART_BEAT_TS = 0x103;
     private static Context context;
     View rootView;
     protected Activity activity;
@@ -317,14 +318,6 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
             {
                 case HEART_RATE:
 
-                    String battery = msg.getData().getString("Battery Charge Indicator");
-                    Log.d("FileWriter", "File writer with " + battery);
-
-
-
-                    String time1 = msg.getData().getString("Heart Beat Timestamp #1");
-                    Log.d("FileWriter", "File writer with " + time1);
-
                     String HeartRatetext = msg.getData().getString("HeartRate");
 
                     try {
@@ -365,6 +358,12 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                     if (tv != null)tv.setText(InstantSpeedtext);
 
                     break;
+
+                case HEART_BEAT_TS:
+                    String HeartTS = msg.getData().getString("HeartBeatTS");
+                    Log.d("FileWriter", "File writer with " +HeartTS);
+
+
 
             }
         }
