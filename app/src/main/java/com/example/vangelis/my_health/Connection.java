@@ -66,7 +66,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     private static Context context;
     View rootView;
     protected Activity activity;
-    private static FileOutputStream outputStreamWriter;
+    private static FileWriter outputStreamWriter;
 
     private LineChart mChart;
     public Connection() {
@@ -109,7 +109,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
             dir.mkdirs();
             File file = new File(dir, "filename");
 
-             outputStreamWriter = new FileOutputStream(file);
+              outputStreamWriter =  new FileWriter(file);
 
             Log.d("FileWriter", "File writer with " + Environment.getExternalStorageDirectory().getPath());
 
