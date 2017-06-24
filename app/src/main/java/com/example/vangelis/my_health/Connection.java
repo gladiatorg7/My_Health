@@ -77,11 +77,6 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                              Bundle savedInstanceState) {
 
         try {
-            String path =
-                    Environment.getExternalStorageDirectory() + File.separator  + "vaggos";
-            // Create the folder.
-            File folder = new File(path);
-            folder.mkdirs();
 
             // Create the file.
             File file = new File("/mnt/sdcard/config.txt");
