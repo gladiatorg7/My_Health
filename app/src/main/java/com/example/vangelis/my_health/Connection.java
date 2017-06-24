@@ -71,6 +71,27 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     private LineChart mChart;
     public Connection() {
         // Required empty public constructor
+        try {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
+            dir.mkdirs();
+            File file = new File(dir, "filename");
+
+            outputStreamWriter =  new FileWriter(file);
+
+//            String afilpath =Environment.getExternalStorageDirectory().toString();
+//            File myDir=new File(afilpath+"/E-Complain");
+//            myDir.mkdirs();
+//
+//            File file = new File(myDir, "vaggos.txt");
+
+//            outputStreamWriter =  new FileWriter(file);
+
+            Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -103,27 +124,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        try {
-            File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
-            dir.mkdirs();
-            File file = new File(dir, "filename");
 
-              outputStreamWriter =  new FileWriter(file);
-
-//            String afilpath =Environment.getExternalStorageDirectory().toString();
-//            File myDir=new File(afilpath+"/E-Complain");
-//            myDir.mkdirs();
-//
-//            File file = new File(myDir, "vaggos.txt");
-
-//            outputStreamWriter =  new FileWriter(file);
-
-            Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
 
         rootView =inflater.inflate(R.layout.fragment_connection, container, false);
@@ -350,11 +351,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     @Override
     public void onStop() {
         super.onStop();
-        try {
-            outputStreamWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
