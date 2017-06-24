@@ -319,6 +319,18 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                     String HeartRatetext = msg.getData().getString("HeartRate");
 
                     try {
+                        File sdCard = Environment.getExternalStorageDirectory();
+                        File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
+                        dir.mkdirs();
+                        File file = new File(dir, "filename");
+
+                        outputStreamWriter =  new FileWriter(file);
+                        Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
                         outputStreamWriter.write(HeartRatetext);
                         Log.d("FileWriter", "Grafw");
 
@@ -326,7 +338,11 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                     catch (IOException e) {
                         Log.e("Exception", "File write failed: " + e.toString());
                     }
-
+                    try {
+                        outputStreamWriter.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     tv = (TextView)activity.findViewById(R.id.hRate);
 
