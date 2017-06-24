@@ -34,8 +34,10 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -60,7 +62,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     private static Context context;
     View rootView;
     protected Activity activity;
-    private static OutputStreamWriter outputStreamWriter;
+    private static BufferedWriter outputStreamWriter;
 
     private LineChart mChart;
     public Connection() {
@@ -78,8 +80,10 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
 
         try {
 
-            outputStreamWriter = new OutputStreamWriter(activity.getApplicationContext().openFileOutput("//mnt//sdcard//config.txt", Context.MODE_PRIVATE));
-        } catch (FileNotFoundException e) {
+            FileWriter fileWriter = new FileWriter(Environment.getExternalStorageDirectory().getPath() + "/vaggos.txt");
+
+            outputStreamWriter = new BufferedWriter(fileWriter);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
