@@ -316,6 +316,15 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
             switch (msg.what)
             {
                 case HEART_RATE:
+
+                    String battery = msg.getData().getString("Battery Charge Indicator");
+                    Log.d("FileWriter", "File writer with " + battery);
+
+
+
+                    String time1 = msg.getData().getString("Heart Beat Timestamp #1");
+                    Log.d("FileWriter", "File writer with " + time1);
+
                     String HeartRatetext = msg.getData().getString("HeartRate");
 
                     try {
@@ -324,7 +333,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                         dir.mkdirs();
                         File file = new File(dir, "filename");
 
-                        outputStreamWriter =  new FileWriter(file);
+                        outputStreamWriter =  new FileWriter(file, true);
                         Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
 
                     } catch (IOException e) {
