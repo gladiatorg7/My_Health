@@ -104,22 +104,22 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                              Bundle savedInstanceState) {
 
         try {
-//            File sdCard = Environment.getExternalStorageDirectory();
-//            File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
-//            dir.mkdirs();
-//            File file = new File(dir, "filename");
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
+            dir.mkdirs();
+            File file = new File(dir, "filename");
+
+              outputStreamWriter =  new FileWriter(file);
+
+//            String afilpath =Environment.getExternalStorageDirectory().toString();
+//            File myDir=new File(afilpath+"/E-Complain");
+//            myDir.mkdirs();
 //
-//              outputStreamWriter =  new FileWriter(file);
+//            File file = new File(myDir, "vaggos.txt");
 
-            String afilpath =Environment.getExternalStorageDirectory().toString();
-            File myDir=new File(afilpath+"/E-Complain");
-            myDir.mkdirs();
+//            outputStreamWriter =  new FileWriter(file);
 
-            File file = new File(myDir, "vaggos.txt");
-
-            outputStreamWriter =  new FileWriter(file);
-
-            Log.d("FileWriter", "File writer with " + myDir.getAbsolutePath());
+            Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
 
         } catch (IOException e) {
             e.printStackTrace();
