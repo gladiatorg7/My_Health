@@ -138,6 +138,9 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                        }
 
 
+
+
+
                    }
 
                    //BhMacID = btDevice.getAddress();
