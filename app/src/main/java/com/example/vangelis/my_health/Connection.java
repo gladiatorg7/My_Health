@@ -83,6 +83,8 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
             FileWriter fileWriter = new FileWriter(Environment.getExternalStorageDirectory().getPath() + "/vaggos.txt");
 
             outputStreamWriter = new BufferedWriter(fileWriter);
+            Log.d("FileWriter", "File writer with " + Environment.getExternalStorageDirectory().getPath());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -281,6 +283,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
 
                     try {
                         outputStreamWriter.write(HeartRatetext);
+                        Log.d("FileWriter", "Grafw");
 
                     }
                     catch (IOException e) {
