@@ -6,10 +6,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +34,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -74,7 +77,15 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                              Bundle savedInstanceState) {
 
         try {
-            outputStreamWriter = new OutputStreamWriter(activity.getApplicationContext().openFileOutput("config.txt", Context.MODE_PRIVATE));
+            String path =
+                    Environment.getExternalStorageDirectory() + File.separator  + "vaggos";
+            // Create the folder.
+            File folder = new File(path);
+            folder.mkdirs();
+
+            // Create the file.
+            File file = new File(folder, "config.txt");
+            outputStreamWriter = new OutputStreamWriter(activity.getApplicationContext().openFileOutput(file.getAbsolutePath(), Context.MODE_PRIVATE));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
