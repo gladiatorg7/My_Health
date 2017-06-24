@@ -32,6 +32,9 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.w3c.dom.Text;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -51,8 +54,11 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     NewConnectedListener _NConnListener;
     private final int HEART_RATE = 0x100;
     private final int INSTANT_SPEED = 0x101;
+    private static Context context;
     View rootView;
     protected Activity activity;
+    private static OutputStreamWriter outputStreamWriter;
+
     private LineChart mChart;
     public Connection() {
         // Required empty public constructor
@@ -66,6 +72,13 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        try {
+            outputStreamWriter = new OutputStreamWriter(activity.getApplicationContext().openFileOutput("config.txt", Context.MODE_PRIVATE));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         rootView =inflater.inflate(R.layout.fragment_connection, container, false);
       //  TextView tvHeart=(TextView) getActivity().findViewById(R.id.labelHeartRate);
@@ -254,6 +267,16 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
             {
                 case HEART_RATE:
                     String HeartRatetext = msg.getData().getString("HeartRate");
+
+                    try {
+                        outputStreamWriter.write(HeartRatetext);
+
+                    }
+                    catch (IOException e) {
+                        Log.e("Exception", "File write failed: " + e.toString());
+                    }
+
+
                     tv = (TextView)activity.findViewById(R.id.hRate);
 
                     System.out.println("Heart Rate Info is "+ HeartRatetext);
@@ -274,7 +297,33 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
 
     };
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            outputStreamWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            outputStreamWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            outputStreamWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
