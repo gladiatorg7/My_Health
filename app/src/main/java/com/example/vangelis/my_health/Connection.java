@@ -80,7 +80,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
 
         try {
 
-            FileWriter fileWriter = new FileWriter(Environment.getExternalStorageDirectory().getPath() + "/vaggos.txt");
+            FileWriter fileWriter = new FileWriter(context.getFilesDir().getPath().toString() + "/vaggos.txt");
 
             outputStreamWriter = new BufferedWriter(fileWriter);
             Log.d("FileWriter", "File writer with " + Environment.getExternalStorageDirectory().getPath());
