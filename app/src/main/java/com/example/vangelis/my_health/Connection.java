@@ -104,14 +104,22 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                              Bundle savedInstanceState) {
 
         try {
-            File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
-            dir.mkdirs();
-            File file = new File(dir, "filename");
+//            File sdCard = Environment.getExternalStorageDirectory();
+//            File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
+//            dir.mkdirs();
+//            File file = new File(dir, "filename");
+//
+//              outputStreamWriter =  new FileWriter(file);
 
-              outputStreamWriter =  new FileWriter(file);
+            String afilpath =Environment.getExternalStorageDirectory().toString();
+            File myDir=new File(afilpath+"/E-Complain");
+            myDir.mkdirs();
 
-            Log.d("FileWriter", "File writer with " + Environment.getExternalStorageDirectory().getPath());
+            File file = new File(myDir, "vaggos.txt");
+
+            outputStreamWriter =  new FileWriter(file);
+
+            Log.d("FileWriter", "File writer with " + myDir.getAbsolutePath());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -362,10 +370,6 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     @Override
     public void onPause() {
         super.onPause();
-        try {
-            outputStreamWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 }
