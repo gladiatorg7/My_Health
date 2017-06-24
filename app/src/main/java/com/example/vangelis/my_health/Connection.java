@@ -78,9 +78,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
 
         try {
 
-            // Create the file.
-            File file = new File("/mnt/sdcard/config.txt");
-            outputStreamWriter = new OutputStreamWriter(activity.getApplicationContext().openFileOutput(file.getAbsolutePath(), Context.MODE_PRIVATE));
+            outputStreamWriter = new OutputStreamWriter(activity.getApplicationContext().openFileOutput("/mnt/sdcard/config.txt", Context.MODE_PRIVATE));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
