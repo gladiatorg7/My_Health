@@ -84,7 +84,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
             folder.mkdirs();
 
             // Create the file.
-            File file = new File(folder, "config.txt");
+            File file = new File("/mnt/sdcard/config.txt");
             outputStreamWriter = new OutputStreamWriter(activity.getApplicationContext().openFileOutput(file.getAbsolutePath(), Context.MODE_PRIVATE));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
