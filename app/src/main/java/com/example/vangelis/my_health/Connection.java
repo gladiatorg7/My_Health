@@ -55,7 +55,7 @@ import zephyr.android.HxMBT.ZephyrProtocol;
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
  */
-public class Connection extends android.support.v4.app.Fragment implements OnClickListener {
+public class Connection extends android.support.v4.app.Fragment implements View.OnClickListener {
     /** Called when the activity is first created. */
     BluetoothAdapter adapter = null;
     BTClient _bt;
@@ -68,7 +68,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
     View rootView;
     protected Activity activity;
     private static FileWriter outputStreamWriter;
-
+    public int counter=0;
     private LineChart mChart;
     public Connection() {
         // Required empty public constructor
@@ -76,7 +76,7 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
             File sdCard = Environment.getExternalStorageDirectory();
             File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
             dir.mkdirs();
-            File file = new File(dir, "filename");
+            File file = new File(dir, "filename.txt");
 
             outputStreamWriter =  new FileWriter(file);
 
@@ -313,6 +313,18 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
         public void handleMessage(Message msg)
         {
 
+            try {
+                File sdCard = Environment.getExternalStorageDirectory();
+                File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
+                dir.mkdirs();
+                File file = new File(dir, "filename.txt");
+
+                outputStreamWriter =  new FileWriter(file, true);
+                Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             TextView tv;
             switch (msg.what)
             {
@@ -320,20 +332,9 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
 
                     String HeartRatetext = msg.getData().getString("HeartRate");
 
+                    counter++;
                     try {
-                        File sdCard = Environment.getExternalStorageDirectory();
-                        File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
-                        dir.mkdirs();
-                        File file = new File(dir, "filename");
-
-                        outputStreamWriter =  new FileWriter(file, true);
-                        Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        outputStreamWriter.write(HeartRatetext);
+                        outputStreamWriter.write(counter+ ":" + HeartRatetext);
                         Log.d("FileWriter", "Grafw");
 
                     }
@@ -362,7 +363,19 @@ public class Connection extends android.support.v4.app.Fragment implements OnCli
                 case HEART_BEAT_TS:
                     String HeartTS = msg.getData().getString("HeartBeatTS");
                     Log.d("FileWriter", "File writer with " +HeartTS);
+                    try {
+                        outputStreamWriter.write(HeartTS+"-");
+                        Log.d("FileWriter", "Grafw");
 
+                    }
+                    catch (IOException e) {
+                        Log.e("Exception", "File write failed: " + e.toString());
+                    }
+                    try {
+                        outputStreamWriter.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
 
             }

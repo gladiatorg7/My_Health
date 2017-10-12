@@ -11,6 +11,8 @@ import android.os.Message;
 import android.widget.TextView;
 
 
+import java.util.Arrays;
+
 import zephyr.android.HxMBT.*;
 
 public class NewConnectedListener extends ConnectListenerImpl
@@ -87,7 +89,7 @@ public class NewConnectedListener extends ConnectListenerImpl
                     int[] HeartBeatTS = HRSpeedDistPacket.GetHeartBeatTS(DataArray);
 
                     text1 = _aNewHandler.obtainMessage(HEART_BEAT_TS);
-                    b1.putString("HeartBeatTS", String.valueOf(HeartBeatTS));
+                    b1.putString("HeartBeatTS", Arrays.toString(HeartBeatTS));
                     text1.setData(b1);
                     _aNewHandler.sendMessage(text1);
                     System.out.println("Heart Beat TS is "+ HeartBeatTS);

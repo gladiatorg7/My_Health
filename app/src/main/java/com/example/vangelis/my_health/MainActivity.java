@@ -1,13 +1,16 @@
 package com.example.vangelis.my_health;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -33,7 +36,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
 
     private RelativeLayout chartLayout;
     private LineChart mChart;
@@ -155,7 +157,7 @@ public class MainActivity extends AppCompatActivity
                     });
                     //pause between adds
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(10);          
                     } catch (InterruptedException e) {
                         //manage error ...
                     }
@@ -263,6 +265,10 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.my_history) {
+            History historyFragment =new History();
+            FragmentManager manager =getSupportFragmentManager();
+
+            manager.beginTransaction().replace(R.id.content_main,historyFragment,historyFragment.getTag()).addToBackStack(null).commit();
 
         } else if (id == R.id.send_data) {
 
