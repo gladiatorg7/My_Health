@@ -271,7 +271,10 @@ public class MainActivity extends AppCompatActivity
             manager.beginTransaction().replace(R.id.content_main,historyFragment,historyFragment.getTag()).addToBackStack(null).commit();
 
         } else if (id == R.id.send_data) {
+            Send sendFragment =new Send();
+            FragmentManager manager =getSupportFragmentManager();
 
+            manager.beginTransaction().replace(R.id.content_main,sendFragment,sendFragment.getTag()).addToBackStack(null).commit();
         } else if (id == R.id.contact_us) {
 
         }
