@@ -2,8 +2,11 @@ package com.example.vangelis.my_health;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -11,16 +14,22 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import zephyr.android.HxMBT.BTClient;
 import zephyr.android.HxMBT.ZephyrProtocol;
@@ -34,6 +43,12 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -41,6 +56,8 @@ public class MainActivity extends AppCompatActivity
     private LineChart mChart;
     int hrate;
     TextView tv;
+    ToggleButton toggleButton ;
+    private static FileWriter outputStreamWriter;
 
     /** Called when the activity is first created. */
     BluetoothAdapter adapter = null;
@@ -67,12 +84,54 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+        toggleButton= (ToggleButton)findViewById(R.id.toggleButton);
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            TextView labelmsg=(TextView) findViewById(R.id.labelStatusMsg);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    if(labelmsg.getText().equals("") || (labelmsg.getText().equals("Disconnected from HxM!"))){
+                        toggleButton.setChecked(false);
+                        Toast.makeText(getApplicationContext(),"Please connect to Zephyr BT HxM",Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        File sdCard = Environment.getExternalStorageDirectory();
+                        File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
+                        dir.mkdirs();
+                        String filename =Calendar.getInstance().getTime().toString()+".txt";
+                        EditText filenameT=(EditText) findViewById(R.id.filename);
+                        filenameT.setText(filename);
+                        File file = new File(dir, filename);
+
+                        try {
+                            outputStreamWriter =  new FileWriter(file);
+
+                            Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getApplicationContext(),"The Logging started",Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    // The toggle is disabled
+                    if(labelmsg.getText().equals("")){
+                        try {
+                            outputStreamWriter.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getApplicationContext(),"The Logging stoped",Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
 
         chartLayout= (RelativeLayout) findViewById(R.id.chartLayout);
         //create line chart

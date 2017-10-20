@@ -24,9 +24,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.os.Handler;
+import android.widget.ToggleButton;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -46,6 +48,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Set;
 
 import zephyr.android.HxMBT.BTClient;
@@ -68,31 +72,14 @@ public class Connection extends android.support.v4.app.Fragment implements View.
     View rootView;
     protected Activity activity;
     private static FileWriter outputStreamWriter;
+    ToggleButton toggleButton ;
     public int counter=0;
     private LineChart mChart;
+    LayoutInflater inflater;
+    ViewGroup container;
     public Connection() {
         // Required empty public constructor
-        try {
-            File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
-            dir.mkdirs();
-            File file = new File(dir, "filename.txt");
 
-            outputStreamWriter =  new FileWriter(file);
-
-//            String afilpath =Environment.getExternalStorageDirectory().toString();
-//            File myDir=new File(afilpath+"/E-Complain");
-//            myDir.mkdirs();
-//
-//            File file = new File(myDir, "vaggos.txt");
-
-//            outputStreamWriter =  new FileWriter(file);
-
-            Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -127,8 +114,10 @@ public class Connection extends android.support.v4.app.Fragment implements View.
 
 
 
-
+        this.inflater=inflater;
+        this.container=container;
         rootView =inflater.inflate(R.layout.fragment_connection, container, false);
+
       //  TextView tvHeart=(TextView) getActivity().findViewById(R.id.labelHeartRate);
       //  TextView tvSpeed=(TextView) getActivity().findViewById(R.id.labelInstantSpeed);
 
@@ -162,6 +151,11 @@ public class Connection extends android.support.v4.app.Fragment implements View.
                    //if(!adapter.isEnabled()){
                    //     adapter.enable();
                    //}
+
+                   if (!adapter.isEnabled()) {          // enable bluetooth
+                       Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                       startActivityForResult(enableBtIntent, 1);
+                   }
                    Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
 
                    if (pairedDevices.size() > 0)
@@ -314,41 +308,51 @@ public class Connection extends android.support.v4.app.Fragment implements View.
         {
 
             try {
-                File sdCard = Environment.getExternalStorageDirectory();
-                File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
-                dir.mkdirs();
-                File file = new File(dir, "filename.txt");
+                rootView =inflater.inflate(R.layout.activity_main, container, false);
+                EditText filename=(EditText) activity.findViewById(R.id.filename);
+                toggleButton = (ToggleButton)  activity.findViewById(R.id.toggleButton);
+                if(toggleButton.isChecked()){
+                    File sdCard = Environment.getExternalStorageDirectory();
+                    File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
+                    dir.mkdirs();
+                  File file = new File(dir, filename.getText().toString());
 
-                outputStreamWriter =  new FileWriter(file, true);
-                Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
+                    outputStreamWriter =  new FileWriter(file, true);
+                    Log.d("FileWriter", "File writer with " + dir.getAbsolutePath());
+
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
             TextView tv;
+            TextView labelmsg = (TextView) activity.findViewById(R.id.labelStatusMsg);
             switch (msg.what)
             {
                 case HEART_RATE:
 
                     String HeartRatetext = msg.getData().getString("HeartRate");
+                    if(toggleButton.isChecked()){
+                        counter++;
+                        try {
+                            outputStreamWriter.write(counter+ ":" + HeartRatetext);
+                            Log.d("FileWriter", "Grafw");
 
-                    counter++;
-                    try {
-                        outputStreamWriter.write(counter+ ":" + HeartRatetext);
-                        Log.d("FileWriter", "Grafw");
+                        }
+                        catch (IOException e) {
+                            Log.e("Exception", "File write failed: " + e.toString());
+                        }
+                        try {
+                            if(outputStreamWriter!=null){
+                                outputStreamWriter.close();
+                            }
 
-                    }
-                    catch (IOException e) {
-                        Log.e("Exception", "File write failed: " + e.toString());
-                    }
-                    try {
-                        outputStreamWriter.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     tv = (TextView)activity.findViewById(R.id.hRate);
-
                     System.out.println("Heart Rate Info is "+ HeartRatetext);
                     if (tv != null)tv.setText(HeartRatetext);
                     break;
@@ -361,23 +365,28 @@ public class Connection extends android.support.v4.app.Fragment implements View.
                     break;
 
                 case HEART_BEAT_TS:
-                    String HeartTS = msg.getData().getString("HeartBeatTS");
-                    Log.d("FileWriter", "File writer with " +HeartTS);
-                    try {
-                        outputStreamWriter.write(HeartTS+"-");
-                        Log.d("FileWriter", "Grafw");
-
+                    String HeartTS1 = msg.getData().getString("HeartBeatTS");
+                    String[] HeartTS2 = HeartTS1.split("\\[");
+                    String[] HeartTS3 = HeartTS2[1].split("\\]");
+                    String[] HeartTS = HeartTS3[0].split(", ");
+                    System.out.println("--->"+HeartTS[1].toString());
+                    if(toggleButton.isChecked()){
+                        Log.d("FileWriter", "File writer with " +HeartTS);
+                        try {
+                            outputStreamWriter.write("->"+(Integer.parseInt(HeartTS[0])-Integer.parseInt(HeartTS[1]))+"-");
+                            Log.d("FileWriter", "Grafw");
+                        }
+                        catch (IOException e) {
+                            Log.e("Exception", "File write failed: " + e.toString());
+                        }
+                        try {
+                            if(outputStreamWriter!=null){
+                                outputStreamWriter.close();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    catch (IOException e) {
-                        Log.e("Exception", "File write failed: " + e.toString());
-                    }
-                    try {
-                        outputStreamWriter.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-
             }
         }
 
@@ -395,7 +404,10 @@ public class Connection extends android.support.v4.app.Fragment implements View.
     public void onDestroy() {
         super.onDestroy();
         try {
-            outputStreamWriter.close();
+            if(outputStreamWriter!=null){
+                outputStreamWriter.close();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

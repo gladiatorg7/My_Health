@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.vangelis.my_health">
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -19,9 +20,25 @@
         <activity android:name=".Intro_Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action
+                    android:name="android.intent.action.PICK"/>
+                <category
+                    android:name="android.intent.category.DEFAULT"/>
+                <category
+                    android:name="android.intent.category.OPENABLE"/>
+                <data android:mimeType="text/*"/>
             </intent-filter>
+            <provider
+                android:name="android.support.v4.content.FileProvider"
+                android:authorities="com.example.vangelis.my_health.fileprovider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+                ...
+                <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths" />
+            </provider>
         </activity>
         <activity
             android:name=".MainActivity"
