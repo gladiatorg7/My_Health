@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -77,6 +78,7 @@ public class Connection extends android.support.v4.app.Fragment implements View.
     private LineChart mChart;
     LayoutInflater inflater;
     ViewGroup container;
+    Chronometer chronometer;
     public Connection() {
         // Required empty public constructor
 
@@ -116,6 +118,8 @@ public class Connection extends android.support.v4.app.Fragment implements View.
 
         this.inflater=inflater;
         this.container=container;
+        toggleButton=(ToggleButton) activity.findViewById(R.id.toggleButton);
+        toggleButton.setVisibility(View.GONE);
         rootView =inflater.inflate(R.layout.fragment_connection, container, false);
 
       //  TextView tvHeart=(TextView) getActivity().findViewById(R.id.labelHeartRate);
@@ -311,6 +315,7 @@ public class Connection extends android.support.v4.app.Fragment implements View.
                 rootView =inflater.inflate(R.layout.activity_main, container, false);
                 EditText filename=(EditText) activity.findViewById(R.id.filename);
                 toggleButton = (ToggleButton)  activity.findViewById(R.id.toggleButton);
+                chronometer=(Chronometer) activity.findViewById(R.id.chronometer);
                 if(toggleButton.isChecked()){
                     File sdCard = Environment.getExternalStorageDirectory();
                     File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
@@ -335,7 +340,7 @@ public class Connection extends android.support.v4.app.Fragment implements View.
                     if(toggleButton.isChecked()){
                         counter++;
                         try {
-                            outputStreamWriter.write(counter+ ":" + HeartRatetext);
+                            outputStreamWriter.write(chronometer.getText()+" "+ HeartRatetext);
                             Log.d("FileWriter", "Grafw");
 
                         }
@@ -369,11 +374,11 @@ public class Connection extends android.support.v4.app.Fragment implements View.
                     String[] HeartTS2 = HeartTS1.split("\\[");
                     String[] HeartTS3 = HeartTS2[1].split("\\]");
                     String[] HeartTS = HeartTS3[0].split(", ");
-                    System.out.println("--->"+HeartTS[1].toString());
+                  //  System.out.println("--->"+HeartTS[1].toString());
                     if(toggleButton.isChecked()){
                         Log.d("FileWriter", "File writer with " +HeartTS);
                         try {
-                            outputStreamWriter.write("->"+(Integer.parseInt(HeartTS[0])-Integer.parseInt(HeartTS[1]))+"-");
+                            outputStreamWriter.write(" "+(Integer.parseInt(HeartTS[0])-Integer.parseInt(HeartTS[1]))+"\n");
                             Log.d("FileWriter", "Grafw");
                         }
                         catch (IOException e) {
@@ -403,6 +408,8 @@ public class Connection extends android.support.v4.app.Fragment implements View.
     @Override
     public void onDestroy() {
         super.onDestroy();
+        toggleButton=(ToggleButton) activity.findViewById(R.id.toggleButton);
+        toggleButton.setVisibility(View.VISIBLE);
         try {
             if(outputStreamWriter!=null){
                 outputStreamWriter.close();

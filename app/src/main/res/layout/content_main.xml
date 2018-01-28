@@ -12,7 +12,8 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.vangelis.my_health.MainActivity"
     tools:showIn="@layout/app_bar_main"
-    android:background="@android:color/darker_gray">
+    android:background="@android:color/darker_gray"
+    android:orientation="vertical">
 
     <TextView
         android:text="0.00"
@@ -93,14 +94,7 @@
 
     </RelativeLayout>
 
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/hRate"
-        android:layout_alignLeft="@+id/hRate"
-        android:layout_alignStart="@+id/hRate"
-        android:text="ToggleButton" />
+
 
     <EditText
         android:id="@+id/filename"
@@ -109,5 +103,32 @@
         android:clickable="false"
         android:editable="false"
         android:visibility="invisible" />
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView4"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_alignEnd="@+id/iSpeed"
+        android:layout_alignRight="@+id/iSpeed"
+        android:countDown="false" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/filename"
+        android:layout_alignLeft="@+id/labelHeartRate"
+        android:layout_alignStart="@+id/labelHeartRate"
+        android:text="Logger is ->" />
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ToggleButton"
+        android:layout_below="@+id/labelStatusMsg"
+        android:layout_alignRight="@+id/hRate"
+        android:layout_alignEnd="@+id/hRate" />
 
 </RelativeLayout>

@@ -28,7 +28,7 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     //compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-   // compile 'com.github.PhilJay:MPAndroidChart:v2.2.0'
+    // compile 'com.github.PhilJay:MPAndroidChart:v2.2.0'
     //compile 'com.github.PhilJay:MPAndroidChart-Realm:v2.0.2@aar'
     testCompile 'junit:junit:4.12'
     compile files('libs/HxMBT.jar')

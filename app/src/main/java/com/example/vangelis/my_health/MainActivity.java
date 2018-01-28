@@ -1,5 +1,6 @@
 package com.example.vangelis.my_health;
 
+
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -24,6 +26,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -49,6 +53,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     int hrate;
     TextView tv;
     ToggleButton toggleButton ;
+    Chronometer chronometer;
     private static FileWriter outputStreamWriter;
 
     /** Called when the activity is first created. */
@@ -84,18 +90,22 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
+        chronometer=(Chronometer) findViewById(R.id.chronometer);
+       // chronometer.setFormat("MM:SS");
         toggleButton= (ToggleButton)findViewById(R.id.toggleButton);
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             TextView labelmsg=(TextView) findViewById(R.id.labelStatusMsg);
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is enabled
-                    if(labelmsg.getText().equals("") || (labelmsg.getText().equals("Disconnected from HxM!"))){
+                    if(labelmsg.getText().equals("") || (labelmsg.getText().equals("Disconnected from HxM!")|| labelmsg.getText().equals("Unable to Connect !"))){
                         toggleButton.setChecked(false);
                         Toast.makeText(getApplicationContext(),"Please connect to Zephyr BT HxM",Toast.LENGTH_LONG).show();
                     }
                     else{
+
+                        chronometer.setBase(SystemClock.elapsedRealtime());
+                        chronometer.start();
                         File sdCard = Environment.getExternalStorageDirectory();
                         File dir = new File (sdCard.getAbsolutePath() + "/dir1/dir2");
                         dir.mkdirs();
@@ -116,8 +126,11 @@ public class MainActivity extends AppCompatActivity
 
                 } else {
                     // The toggle is disabled
-                    if(labelmsg.getText().equals("")){
+                    if(!labelmsg.getText().equals("") ){
+                        chronometer.stop();
+
                         try {
+
                             outputStreamWriter.close();
                         } catch (IOException e) {
                             e.printStackTrace();
